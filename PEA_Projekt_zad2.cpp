@@ -6,6 +6,33 @@
 #include<algorithm>
 using namespace std;
 
+int ilosc_miast;
+int** macierz;
+int** lista_tabu;
+
+void aktualizuj_liste_tabu()
+{
+    for (int i = 0; i < ilosc_miast; i++)
+    {
+        for (int j = 0; j < ilosc_miast; j++)
+        {
+            if (lista_tabu[i][j] != 0)
+            {
+                lista_tabu[i][j]--;
+            }
+        }
+    }
+}
+
+bool czy_zakazane(int miasto1,int miasto2)
+{
+    if (lista_tabu[miasto1][miasto2] != 0 || lista_tabu[miasto2][miasto1] != 0)
+        return true;
+    else
+        return false;
+}
+
+
 int main()
 {
 
@@ -34,13 +61,12 @@ int main()
     //wczytanie ilosci miast
     getline(plik, wyraz);
 
-    int ilosc_miast;
+    
     ilosc_miast = stoi(wyraz);
 
 
     vector<int> miasta;
-    int** macierz;
-    int** lista_tabu;
+
     //utworzenie macierzy i wpisanie do niej danych
     macierz = new int* [ilosc_miast];
     lista_tabu = new int* [ilosc_miast];
@@ -113,17 +139,16 @@ int main()
     najlepsza_wartosc = aktualny_koszt;
     cout << "0 " << najlepsza_wartosc << " ";
     cout << fixed << setprecision(2) << prd << "%" << endl;
-    //for (int i : aktualne_rozwiazanie)
-    //    cout << i << ' ';
-    
 
     //ilosc iteracji algorytmu
-    int const iteracje = 1000;
+    int const iteracje = 15360;
     int wartosc_najlepszej_zamiany=INT_MAX;
     int wartosc_zamiany;
     int miasto_do_zamiany1, miasto_do_zamiany2;
     int najlepszy_koszt_po_zmianie;
     vector<int> rozwiazanie_pom;
+
+    int kadencja = ilosc_miast;   
 
     //algorytm
     for (int i = 1; i <= iteracje; i++)
@@ -149,8 +174,15 @@ int main()
                             wartosc_zamiany += macierz[rozwiazanie_pom[l]][rozwiazanie_pom[l + 1]];
                         }
                     }
-                    //cout << aktualny_koszt << " " << wartosc_zamiany << " " << wartosc_najlepszej_zamiany << endl;
-                    if (wartosc_zamiany - aktualny_koszt< wartosc_najlepszej_zamiany)
+
+                    //Sprawdzamy czy ruch zakazany poprawia najlepsze rozwiazanie
+                    if (czy_zakazane(j, k) == true && wartosc_zamiany < najlepsza_wartosc)
+                    {
+                        najlepszy_koszt_po_zmianie = wartosc_zamiany;
+                        miasto_do_zamiany1 = j;
+                        miasto_do_zamiany2 = k;
+                    }
+                    else if (wartosc_zamiany - aktualny_koszt< wartosc_najlepszej_zamiany && czy_zakazane(j,k) == false)
                     {
                         wartosc_najlepszej_zamiany = wartosc_zamiany - aktualny_koszt;
                         miasto_do_zamiany1 = j;
@@ -160,9 +192,12 @@ int main()
                 
 
             }
-            //cout << wartosc_najlepszej_zamiany<<endl;
         }
-        //cout << miasto_do_zamiany1 << " " << miasto_do_zamiany2 << endl;
+        //aktualizacja i wpisywanie do listy tabu
+        aktualizuj_liste_tabu();
+        lista_tabu[miasto_do_zamiany1][miasto_do_zamiany2] = kadencja;
+        lista_tabu[miasto_do_zamiany2][miasto_do_zamiany1] = kadencja;
+
         iter_swap(aktualne_rozwiazanie.begin() + miasto_do_zamiany1, aktualne_rozwiazanie.begin() + miasto_do_zamiany2);
         aktualny_koszt = najlepszy_koszt_po_zmianie;
         if (aktualny_koszt < najlepsza_wartosc)
@@ -172,12 +207,12 @@ int main()
             cout << i <<" " << najlepsza_wartosc << " ";
             cout << fixed << setprecision(2) << prd << "%" << endl;
         }
+
+        
         //for (int i : aktualne_rozwiazanie)
         //    cout << i << ' ';
         //cout << endl;
     }
-
-
 
 }
 
