@@ -89,7 +89,6 @@ int main()
         plik >> wyraz;
         macierz[rzad][kolumna] = stoi(wyraz);
         lista_tabu[rzad][kolumna] = 0;
-        //cout << macierz[rzad][kolumna] << " ";
         kolumna++;
     }
     plik >> wyraz;
@@ -101,8 +100,11 @@ int main()
     int najmniejszy_koszt=INT_MAX;
     int najtansze_miasto;
     int najlepsza_wartosc;
+    int wartosc_pierwszej_trasy;
+    float wartosc_pierwszej_trasy_prd;
     vector<int> odwiedzone_miasta;
     vector<int> aktualne_rozwiazanie;
+    vector<int> najlepsze_rozwiazanie;
     int aktualny_koszt=0;
     float prd;
     odwiedzone_miasta.push_back(miasto_startowe);
@@ -134,21 +136,28 @@ int main()
         aktualne_miasto = najtansze_miasto;
     }
     aktualny_koszt += macierz[aktualne_miasto][0];
+    wartosc_pierwszej_trasy = aktualny_koszt;
     aktualne_rozwiazanie = odwiedzone_miasta;
     prd = 100 * (aktualny_koszt - wartosc_optymalna) / (float)wartosc_optymalna;
+    wartosc_pierwszej_trasy_prd = prd;
     najlepsza_wartosc = aktualny_koszt;
     cout << "0 " << najlepsza_wartosc << " ";
     cout << fixed << setprecision(2) << prd << "%" << endl;
+    najlepsze_rozwiazanie = aktualne_rozwiazanie;
 
     //ilosc iteracji algorytmu
-    int const iteracje = 15360;
+    int const iteracje = 10000;
+
+    //ilosc kadencji na liscie tabu
+    int kadencja = ilosc_miast;
+
     int wartosc_najlepszej_zamiany=INT_MAX;
     int wartosc_zamiany;
     int miasto_do_zamiany1, miasto_do_zamiany2;
     int najlepszy_koszt_po_zmianie;
     vector<int> rozwiazanie_pom;
 
-    int kadencja = ilosc_miast;   
+   
 
     //algorytm
     for (int i = 1; i <= iteracje; i++)
@@ -206,12 +215,22 @@ int main()
             prd = 100 * (aktualny_koszt - wartosc_optymalna) / (float)wartosc_optymalna;
             cout << i <<" " << najlepsza_wartosc << " ";
             cout << fixed << setprecision(2) << prd << "%" << endl;
+            najlepsze_rozwiazanie = aktualne_rozwiazanie;
         }
 
         
-        //for (int i : aktualne_rozwiazanie)
-        //    cout << i << ' ';
-        //cout << endl;
+    }
+    cout <<"0 " << wartosc_pierwszej_trasy << " " << wartosc_pierwszej_trasy_prd << "%\n";
+    for (int i = 0; i < ilosc_miast; i++)
+    {
+        if (i != ilosc_miast - 1)
+        {
+            cout << najlepsze_rozwiazanie[i] << " -> ";
+        }
+        else
+        {
+            cout << najlepsze_rozwiazanie[i];
+        }
     }
 
 }

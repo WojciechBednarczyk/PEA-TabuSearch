@@ -1,0 +1,10 @@
+﻿  PEA_Projekt_zad2.cpp
+C:\Users\48795\Desktop\Studia\5 semestr\PEA\PEA_Projekt_zad2\PEA_Projekt_zad2.cpp(168,27): warning C4018: "<": niezgodność typu ze znakiem/bez znaku
+C:\Users\48795\Desktop\Studia\5 semestr\PEA\PEA_Projekt_zad2\PEA_Projekt_zad2.cpp(170,33): warning C4018: "<": niezgodność typu ze znakiem/bez znaku
+C:\Users\48795\Desktop\Studia\5 semestr\PEA\PEA_Projekt_zad2\PEA_Projekt_zad2.cpp(176,39): warning C4018: "<": niezgodność typu ze znakiem/bez znaku
+  Trwa generowanie kodu
+  1 of 272 functions ( 0.4%) were compiled, the rest were copied from previous compilation.
+    0 functions were new in current compilation
+    0 functions had inline decision re-evaluated but remain unchanged
+  Zakończono generowanie kodu
+  PEA_Projekt_zad2.vcxproj -> C:\Users\48795\Desktop\Studia\5 semestr\PEA\PEA_Projekt_zad2\Release\PEA_Projekt_zad2.exe
